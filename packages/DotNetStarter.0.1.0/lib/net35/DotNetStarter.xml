@@ -1,0 +1,974 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DotNetStarter</name>
+    </assembly>
+    <members>
+        <member name="T:DotNetStarter.AssemblyFilter">
+            <summary>
+            Default Assembly filter
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.AssemblyFilter.FilterAssembly(System.Reflection.Assembly)">
+            <summary>
+            Default filter excludes: mscorelib, system, microsoft, ektron, and episerver namespaces
+            </summary>
+            <param name="assembly"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetStarter.AssemblyScanner">
+            <summary>
+            Scans given assemblies and stores them in a static registry for later retrieval
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.AssemblyScanner.ReviewRegistry">
+            <summary>
+            Creates a new dictionary from scanned registry, not part of IAssemblyScanner
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.AssemblyScanner.GetTypesFor(System.Type)">
+            <summary>
+            Get scanned types for given type, note: it doesn't filter interfaces or abstracts. 
+            <para>To register a type use the ScanTypeRegistryAttribute assembly attribute!</para>
+            </summary>
+            <param name="scannedType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.AssemblyScanner.Scan(System.Collections.Generic.IEnumerable{System.Reflection.Assembly},System.Collections.Generic.IEnumerable{System.Type},System.Func{System.Reflection.Assembly,System.Boolean})">
+            <summary>
+            Scan the given assemblies for types registered via ScanTypeRegistryAttribute, excludes controlled by the assemblyFilter.
+            </summary>
+            <param name="scanAssemblies"></param>
+            <param name="forTypes"></param>
+            <param name="assemblyFilter"></param>
+        </member>
+        <member name="T:DotNetStarter.Internal.AssemblyLoader">
+            <summary>
+            Default assembly loader
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.Internal.AssemblyLoader.Default">
+            <summary>
+            Default instance, can be changed via SetAssemblyLoader which must be done before Context is used.
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.Internal.AssemblyLoader.SetAssemblyLoader(DotNetStarter.Abstractions.IAssemblyLoader)">
+            <summary>
+            Allows assembly loader to be swapped, IMPORTANT: needs to be executed before Context.Startup()!
+            </summary>
+            <param name="assemblyLoader"></param>
+        </member>
+        <member name="M:DotNetStarter.Internal.AssemblyLoader.GetAssemblyDir">
+            <summary>
+            Gets assembly dll folder
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.Internal.AssemblyLoader.GetAssemblyFiles">
+            <summary>
+            Gets assembly files
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.Internal.AssemblyLoader.GetAssemblies">
+            <summary>
+            Gets application assemblies, note: in netstandard apps local builds won't always include the dlls which could lead to test/debug issues
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetStarter.Internal.ContainerDefaults">
+            <summary>
+            Assigns default instances to the container
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.Internal.ContainerDefaults.Configure(DotNetStarter.Abstractions.ILocatorRegistry,System.Collections.Generic.IEnumerable{DotNetStarter.Abstractions.IDependencyNode},DotNetStarter.Abstractions.IStartupConfiguration,DotNetStarter.Abstractions.IStartupObjectFactory)">
+            <summary>
+            Assigns default instances to the locator
+            </summary>
+            <param name="locator"></param>
+            <param name="filteredModules"></param>
+            <param name="configuration"></param>
+            <param name="objectFactory"></param>
+        </member>
+        <member name="T:DotNetStarter.Internal.StartupConfiguration">
+            <summary>
+            Default implementation for startup configuration objects.
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.Internal.StartupConfiguration.#ctor(System.Collections.Generic.IEnumerable{System.Reflection.Assembly},DotNetStarter.Abstractions.IAssemblyFilter,DotNetStarter.Abstractions.IAssemblyScanner,DotNetStarter.Abstractions.IDependencyFinder,DotNetStarter.Abstractions.IDependencySorter,DotNetStarter.Abstractions.IStartupLogger,DotNetStarter.Abstractions.IStartupModuleFilter,DotNetStarter.Abstractions.ITimedTaskManager)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="assemblies"></param>
+            <param name="assemblyFilter"></param>
+            <param name="assemblyScanner"></param>
+            <param name="dependencyFinder"></param>
+            <param name="dependencySorter"></param>
+            <param name="logger"></param>
+            <param name="moduleFilter"></param>
+            <param name="timedTaskManager"></param>
+        </member>
+        <member name="P:DotNetStarter.Internal.StartupConfiguration.Assemblies">
+            <summary>
+            Application Assemblies
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.Internal.StartupConfiguration.AssemblyFilter">
+            <summary>
+            Default assembly filter
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.Internal.StartupConfiguration.AssemblyScanner">
+            <summary>
+            Default assembly scanner
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.Internal.StartupConfiguration.DependencyFinder">
+            <summary>
+            Default dependency finder
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.Internal.StartupConfiguration.DependencySorter">
+            <summary>
+            Default dependency sorter
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.Internal.StartupConfiguration.Logger">
+            <summary>
+            Default logger
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.Internal.StartupConfiguration.ModuleFilter">
+            <summary>
+            Default module filter
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.Internal.StartupConfiguration.TimedTaskManager">
+            <summary>
+            Default timed task manager
+            </summary>
+        </member>
+        <member name="T:DotNetStarter.Internal.Shutdown">
+            <summary>
+            Provides access to call module shutdown, useful for unit tests, or when finalizer isn't reliable.
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.Internal.Shutdown.CallShutdown">
+            <summary>
+            Calls default initalization handler shutdown. Mainly used for unit tests.
+            </summary>
+        </member>
+        <member name="T:DotNetStarter.DependencyComparer">
+            <summary>
+            Compares nodes by dependency count then by full name if the dependencies are equal
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.DependencyComparer.Compare(DotNetStarter.Abstractions.IDependencyNode,DotNetStarter.Abstractions.IDependencyNode)">
+            <summary>
+            Compares dependency nodes
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetStarter.DependencyFinder">
+            <summary>
+            Default finder for Types or Assemblies for given DependencyBaseAttribute
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.DependencyFinder.Find``1(System.Collections.Generic.IEnumerable{System.Reflection.Assembly},System.Func{System.Reflection.Assembly,System.Boolean})">
+            <summary>
+            Find all typs or assemblies for given attribute.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="assemblies"></param>
+            <param name="assemblyFilter"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetStarter.DependencyNode">
+            <summary>
+            Represents a sorted type with its dependencies and attribute instance.
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.DependencyNode.#ctor(System.Object,System.Type)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="nodeType"></param>
+            <param name="attributeType"></param>
+        </member>
+        <member name="P:DotNetStarter.DependencyNode.Dependencies">
+            <summary>
+            Dependencies
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.DependencyNode.DependencyCount">
+            <summary>
+            Count of Dependencies
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.DependencyNode.FullName">
+            <summary>
+            Full string name of Node
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.DependencyNode.NodeAttribute">
+            <summary>
+            Attribute instance for Node
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.DependencyNode.Node">
+            <summary>
+            Node can be a Type or Assembly
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.DependencyNode.IsAssembly">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.DependencyNode.ToString">
+            <summary>
+            String representation of DependencyNode in form of (DepedencyCount) Fullname: string delimited fullname list of dependencies
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetStarter.DependencySorter">
+            <summary>
+            Default dependency sorter
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.DependencySorter.DependencyComparer">
+            <summary>
+            Default comparer, swappable by changing DependencySorter in IStartupConfiguration
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.DependencySorter.Sort``1(System.Collections.Generic.IEnumerable{System.Object})">
+            <summary>
+            Default sorter or Types or Assemblies
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="nodes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.DependencySorter.StartupNodes(System.Collections.Generic.IEnumerable{System.Object},System.Type,System.Collections.Generic.IComparer{DotNetStarter.Abstractions.IDependencyNode})">
+            <summary>
+            Creates a list of dependency nodes
+            </summary>
+            <param name="nodes"></param>
+            <param name="attr"></param>
+            <param name="comparer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetStarter.ApplicationContext">
+            <summary>
+            Default hook into startup process, preferred to access using Import&lt;T> which call this.
+            </summary>
+        </member>
+        <member name="F:DotNetStarter.ApplicationContext.ScopedProviderKeyInContext">
+            <summary>
+            Dictionary Key to retrive scoped IServiceProvider
+            </summary>
+        </member>
+        <member name="F:DotNetStarter.ApplicationContext.ScopedLocatorKeyInContext">
+            <summary>
+            Dictionary Key to retrive scoped ILocator
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.ApplicationContext.Finalize">
+            <summary>
+            Finalizer
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.ApplicationContext.Startup">
+            <summary>
+            Startup kickoff, to customize the IAssemblyLoader please execute AssemblyLoader.SetAssemblyLoader(IAssemblyLoader loader) before using Context!
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.ApplicationContext.Default">
+            <summary>
+            Default context instance, swapped out by ObjectFactory.CreateStartupHandler();
+            </summary>
+        </member>
+        <member name="T:DotNetStarter.ISupportRequiredService">
+            <summary>
+            Serive provider that throws exceptions if type cannot be found
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.ISupportRequiredService.GetRequiredService(System.Type)">
+            <summary>
+            Gets service or throws exception if not found
+            </summary>
+            <param name="serviceType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetStarter.ServiceProvider">
+            <summary>
+            Wraps ILocator in a service provider
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.ServiceProvider.Locator">
+            <summary>
+            Scoped locator reference
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.ServiceProvider.#ctor(DotNetStarter.Abstractions.ILocator)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="locator"></param>
+        </member>
+        <member name="M:DotNetStarter.ServiceProvider.GetService(System.Type)">
+            <summary>
+            Get service by type
+            </summary>
+            <param name="serviceType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ServiceProvider.Dispose">
+            <summary>
+            Dispose
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.ServiceProvider.GetRequiredService(System.Type)">
+            <summary>
+            Gets a service or throws exception if one is not found
+            </summary>
+            <param name="serviceType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetStarter.IServiceScope">
+            <summary>
+            Access to scoped provider
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.IServiceScope.ServiceProvider">
+            <summary>
+            Scoped service provider
+            </summary>
+        </member>
+        <member name="T:DotNetStarter.ServiceScope">
+            <summary>
+            Access to scoped service provider
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.ServiceScope.#ctor(System.IServiceProvider)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="provider"></param>
+        </member>
+        <member name="P:DotNetStarter.ServiceScope.ServiceProvider">
+            <summary>
+            Scoped IServiceProvider
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.ServiceScope.Dispose">
+            <summary>
+            Dispose service provider
+            </summary>
+        </member>
+        <member name="T:DotNetStarter.IServiceScopeFactory">
+            <summary>
+            Factory to create scoped service providers
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.IServiceScopeFactory.CreateScope">
+            <summary>
+            Creates a scope
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetStarter.ServiceScopeFactory">
+            <summary>
+            Creates a scoped service provider with injected locator
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.ServiceScopeFactory.#ctor(DotNetStarter.Abstractions.ILocator)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="locator"></param>
+        </member>
+        <member name="M:DotNetStarter.ServiceScopeFactory.CreateScope">
+            <summary>
+            Creates a scoped service provider
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetStarter.StartupObjectFactory">
+            <summary>
+            Default initalization object factory, responsible for creating types before container is ready
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.StartupObjectFactory.SortOrder">
+            <summary>
+            Set to zero, if overriding set to higher number.
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateAssemblyFilter">
+            <summary>
+            Creates default assembly filter.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateAssemblyScanner">
+            <summary>
+            Creates default assembly scanner.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateContainerDefaults">
+            <summary>
+            Creates default container configuration
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateDependencyFinder">
+            <summary>
+            Creates default dependency finder.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateDependencyNode(System.Object,System.Type)">
+            <summary>
+            Creates dependency nodes, used in dependency finder
+            </summary>
+            <param name="nodeType"></param>
+            <param name="attributeType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateDependencySorter">
+            <summary>
+            Creates default dependency sorter
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateStartupConfiguration(System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
+            <summary>
+            Creates default startup configuration
+            </summary>
+            <param name="assemblies">Assemblies found from assembly loader.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateStartupContext(DotNetStarter.Abstractions.ILocator,System.Collections.Generic.IEnumerable{DotNetStarter.Abstractions.IDependencyNode},System.Collections.Generic.IEnumerable{DotNetStarter.Abstractions.IDependencyNode},DotNetStarter.Abstractions.IStartupConfiguration)">
+            <summary>
+            Creates default startup context.
+            </summary>
+            <param name="locator"></param>
+            <param name="filteredModules"></param>
+            <param name="allModules"></param>
+            <param name="startupConfiguration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateStartupLogger">
+            <summary>
+            Creates default initalization logger.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateStartupHandler">
+            <summary>
+            Creates default initalization handler.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateModuleFilter">
+            <summary>
+            Creates default module filter.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateRegistry(DotNetStarter.Abstractions.IStartupConfiguration)">
+            <summary>
+            Creates default ILocatorRegistry, default is null;
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateRequestSettingsProvider">
+            <summary>
+            Creates default request settings provider, used for timed tasks with request scope.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateTimedTask">
+            <summary>
+            Creates a timed task.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.CreateTimedTaskManager">
+            <summary>
+            Creates default timed task manager.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupObjectFactory.GetFactory``2(DotNetStarter.Abstractions.IStartupConfiguration)">
+            <summary>
+            Gets factory type for given factory attribute
+            </summary>
+            <typeparam name="TFactoryAttr"></typeparam>
+            <typeparam name="TFactoryType"></typeparam>
+            <param name="config"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetStarter.StartupContext">
+            <summary>
+            Default startup context
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.StartupContext.#ctor(DotNetStarter.Abstractions.ILocator,System.Collections.Generic.IEnumerable{DotNetStarter.Abstractions.IDependencyNode},System.Collections.Generic.IEnumerable{DotNetStarter.Abstractions.IDependencyNode},DotNetStarter.Abstractions.IStartupConfiguration)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="locator"></param>
+            <param name="allModules"></param>
+            <param name="filteredModules"></param>
+            <param name="intializationConfiguration"></param>
+        </member>
+        <member name="P:DotNetStarter.StartupContext.AllModuleTypes">
+            <summary>
+            List of discovered modules
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.StartupContext.FilteredModuleTypes">
+            <summary>
+            List of executing modules
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.StartupContext.Configuration">
+            <summary>
+            Configuration reference
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.StartupContext.Locator">
+            <summary>
+            Service locator
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.StartupContext.LocatorRegistrations">
+            <summary>
+            Gets the types that registerd locator items
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.StartupContext.Dispose">
+            <summary>
+            Dispose
+            </summary>
+        </member>
+        <member name="T:DotNetStarter.StartupHandler">
+            <summary>
+            Default startup handler
+            </summary>
+        </member>
+        <member name="E:DotNetStarter.StartupHandler.OnLocatorStartupComplete">
+            <summary>
+            Fires after IContainerConfigure.Configure has completed in all executing modules
+            </summary>
+        </member>
+        <member name="E:DotNetStarter.StartupHandler.OnStartupComplete">
+            <summary>
+            Fires after IStartupModule.Startup has completed in all executing modules
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.StartupHandler.Finalize">
+            <summary>
+            Finalizer
+            </summary>        
+        </member>
+        <member name="P:DotNetStarter.StartupHandler.Context">
+            <summary>
+            Context Reference
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.StartupHandler.InitModules">
+            <summary>
+            Modules reference
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.StartupHandler.Configuration">
+            <summary>
+            Configuration Reference
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.StartupHandler.Locator">
+            <summary>
+            Locator Reference
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.StartupHandler.Startup(DotNetStarter.Abstractions.IStartupConfiguration,DotNetStarter.Abstractions.IStartupObjectFactory,DotNetStarter.Abstractions.IStartupContext@)">
+            <summary>
+            Starup process, by default it scans assemblies, sorts modules, configures container, and runs startup for each module
+            </summary>
+            <param name="config"></param>
+            <param name="objectFactory"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StartupHandler.Shutdown">
+            <summary>
+            Executes on finalizer
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.StartupHandler.Startup(System.Collections.Generic.IEnumerable{DotNetStarter.Abstractions.IStartupModule})">
+            <summary>
+            Startups up given modules
+            </summary>
+            <param name="modules"></param>
+        </member>
+        <member name="M:DotNetStarter.StartupHandler.Dispose">
+            <summary>
+            Dispose
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.StartupHandler.Dispose(System.Boolean)">
+            <summary>
+            Dispose
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="T:DotNetStarter.StartupModuleFilter">
+            <summary>
+            Default module filter, excludes nothing
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.StartupModuleFilter.FilterModules(System.Collections.Generic.IEnumerable{DotNetStarter.Abstractions.IDependencyNode})">
+            <summary>
+            Default implementation filters nothing
+            </summary>
+            <param name="modules"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetStarter.ReflectionHelper">
+            <summary>
+            Reflection tool to support both netframework and netstandard
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.Constructors(System.Type)">
+            <summary>
+            Gets all constructors for a type
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetAssembly(System.Type)">
+            <summary>
+            Gets given types assembly
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetBaseType(System.Type)">
+            <summary>
+            Gets a types base type
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetBaseTypes(System.Type)">
+            <summary>
+            Gets all types base implementations
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetCustomAttribute(System.Reflection.Assembly,System.Type,System.Boolean)">
+            <summary>
+            Get custom attribute
+            </summary>
+            <param name="assembly"></param>
+            <param name="attrType"></param>
+            <param name="inherit"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetCustomAttribute(System.Type,System.Type,System.Boolean)">
+            <summary>
+            Get custom attribute if assigned
+            </summary>
+            <param name="type"></param>
+            <param name="attrType"></param>
+            <param name="inherit"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetCustomAttributes(System.Reflection.Assembly,System.Boolean)">
+            <summary>
+            Get custom attribute if assigned
+            </summary>
+            <param name="assembly"></param>
+            <param name="inherit"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetCustomAttributes(System.Type,System.Boolean)">
+            <summary>
+            Gets all custom attributes
+            </summary>
+            <param name="type"></param>
+            <param name="inherit"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetEvents(System.Type)">
+            <summary>
+            Get types events
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetFields(System.Type)">
+            <summary>
+            Get types fields
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetInterfaces(System.Type)">
+            <summary>
+            Gets all interfaces for the type
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetMembers(System.Type)">
+            <summary>
+            Gets types members
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetMethods(System.Type)">
+            <summary>
+            Get types methods
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetProperties(System.Type)">
+            <summary>
+            Get types properties
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetTrueType(System.Type)">
+            <summary>
+            Gets true type, if nullable underlying type is returned
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.GetTypes(System.Reflection.Assembly,System.Boolean)">
+            <summary>
+            Gets all types for the assembly.
+            </summary>
+            <param name="assembly"></param>
+            <param name="exportedTypesOnly"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.HasInterface(System.Type,System.Type)">
+            <summary>
+            Determines if type has interface
+            </summary>
+            <param name="type"></param>
+            <param name="interfaceType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.IsAbstract(System.Type)">
+            <summary>
+            Determines if type is abstract
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.IsAssignableFrom(System.Type,System.Type)">
+            <summary>
+            Determines if checkType is assignable from given type
+            </summary>
+            <param name="type"></param>
+            <param name="checkType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.IsEnum(System.Type)">
+            <summary>
+            Determines if type is an enum
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.IsGenericInterface(System.Type,System.Type)">
+            <summary>
+            Determines if type is a generic interface
+            </summary>
+            <param name="type"></param>
+            <param name="checkType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.IsGenericType(System.Type)">
+            <summary>
+            Determines if type is generic
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.IsInterface(System.Type)">
+            <summary>
+            Determines if type is interface
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.IsNullableType(System.Type)">
+            <summary>
+            Determines if type is nullable
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.ReflectionHelper.IsValueType(System.Type)">
+            <summary>
+            Determines if type is a value type
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DotNetStarter.RequestSettingsProvider">
+            <summary>
+            Default request settings provider
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.RequestSettingsProvider.Items">
+            <summary>
+            Throws not implemented exception
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.RequestSettingsProvider.IsDebugMode">
+            <summary>
+            Returns false
+            </summary>
+        </member>
+        <member name="T:DotNetStarter.RegisterConfiguration">
+            <summary>
+            Registers all types that use RegisterAttribute to container.
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.RegisterConfiguration.Configure(DotNetStarter.Abstractions.ILocatorRegistry,DotNetStarter.Abstractions.IStartupEngine)">
+            <summary>
+            Registers all types that use RegisterAttribute to container.
+            </summary>
+            <param name="container"></param>
+            <param name="engine"></param>
+        </member>
+        <member name="M:DotNetStarter.RegisterConfiguration.Shutdown(DotNetStarter.Abstractions.IStartupEngine)">
+            <summary>
+            Shutdown
+            </summary>
+            <param name="engine"></param>
+        </member>
+        <member name="M:DotNetStarter.RegisterConfiguration.Startup(DotNetStarter.Abstractions.IStartupEngine)">
+            <summary>
+            Startup
+            </summary>
+            <param name="engine"></param>
+        </member>
+        <member name="T:DotNetStarter.StringLogger">
+            <summary>
+            Provides a simpler logger that doesn't use disk storage.
+            </summary>
+        </member>
+        <member name="F:DotNetStarter.StringLogger.StringBuilderLogger">
+            <summary>
+            String builder to store messages
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.StringLogger.ToString">
+            <summary>
+            Returns stringbuilder contents
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.StringLogger.LogException(System.String,System.Exception,System.Type,DotNetStarter.Abstractions.LogLevel)">
+            <summary>
+            Logs exception
+            </summary>
+            <param name="message"></param>
+            <param name="e"></param>
+            <param name="source"></param>
+            <param name="level"></param>
+        </member>
+        <member name="P:DotNetStarter.StringLogger.ToWebString">
+            <summary>
+            Converts line breaks to br tags.
+            </summary>
+        </member>
+        <member name="T:DotNetStarter.TimedTask">
+            <summary>
+            Default timed task
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.TimedTask.Name">
+            <summary>
+            Name of task
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.TimedTask.RequireDebugMode">
+            <summary>
+            Determines if timer is used
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.TimedTask.Scope">
+            <summary>
+            Task scope
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.TimedTask.TimedAction">
+            <summary>
+            Task to execute
+            </summary>
+        </member>
+        <member name="P:DotNetStarter.TimedTask.Timer">
+            <summary>
+            Time to execute task
+            </summary>
+        </member>
+        <member name="T:DotNetStarter.TimedTaskManager">
+            <summary>
+            Default timed task manager
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.TimedTaskManager.#ctor">
+            <summary>
+            Construcor
+            </summary>
+        </member>
+        <member name="F:DotNetStarter.TimedTaskManager._ApplicationTasks">
+            <summary>
+            Store all timed tasks
+            </summary>
+        </member>
+        <member name="M:DotNetStarter.TimedTaskManager.Execute(DotNetStarter.Abstractions.ITimedTask)">
+            <summary>
+            Execute timed task
+            </summary>
+            <param name="task"></param>
+        </member>
+        <member name="M:DotNetStarter.TimedTaskManager.Get(System.String)">
+            <summary>
+            Gets a timed task by name.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.TimedTaskManager.GetAll(System.String)">
+            <summary>
+            Gets all timed tasks matching prefix.
+            </summary>
+            <param name="prefix"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DotNetStarter.TimedTaskManager.ProviderHasItems(DotNetStarter.Abstractions.IRequestSettingsProvider)">
+            <summary>
+            Determines if request settings provider has items and is implemented.
+            </summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

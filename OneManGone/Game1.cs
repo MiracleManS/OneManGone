@@ -12,6 +12,7 @@ namespace OneManGone
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -27,7 +28,7 @@ namespace OneManGone
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            DotNetStarter.ApplicationContext.Startup();
             base.Initialize();
         }
 
